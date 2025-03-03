@@ -32,6 +32,10 @@ function App() {
       </p>
       <footer>
         <p>&copy; 2025 Todo List App</p>
+        <div>
+          <a href="https://twitter.com" target="_blank">Twitter</a> | 
+          <a href="https://github.com" target="_blank">GitHub</a>
+        </div>
       </footer>
     </>
   )
