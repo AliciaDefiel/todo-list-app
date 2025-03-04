@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import About from './About'
 import './App.css'
 
-function App() {
+function Home() {
   const [count, setCount] = useState(0)
 
   return (
@@ -16,9 +18,6 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <header>
-        <h1>Todo List</h1>
-      </header>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
@@ -30,6 +29,25 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <header>
+        <h1>Todo List</h1>
+        <nav>
+          <Link to="/">Home</Link> | <Link to="/about">About</Link>
+        </nav>
+      </header>
+      
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+
       <footer>
         <p>&copy; 2025 Todo List App</p>
         <div>
@@ -37,7 +55,7 @@ function App() {
           <a href="https://github.com" target="_blank">GitHub</a>
         </div>
       </footer>
-    </>
+    </Router>
   )
 }
 
