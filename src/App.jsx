@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import About from './About'
+import TodoList from './TodoList'
 import './App.css'
 
 function Home() {
@@ -39,12 +40,13 @@ function App() {
       <header>
         <h1>Todo List</h1>
         <nav>
-          <Link to="/">Home</Link> | <Link to="/about">About</Link>
+          <Link to="/">Home</Link> | <Link to="/todos">Todos</Link> | <Link to="/about">About</Link>
         </nav>
       </header>
       
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/todos" element={<TodoList />} />
         <Route path="/about" element={<About />} />
       </Routes>
 
