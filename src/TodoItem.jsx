@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function TodoItem({ todo, onToggle, onDelete }) {
   return (
     <li style={{
@@ -25,20 +27,37 @@ function TodoItem({ todo, onToggle, onDelete }) {
       >
         {todo.text}
       </span>
-      <button
-        onClick={() => onDelete(todo.id)}
-        style={{
-          backgroundColor: '#dc3545',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          padding: '5px 10px',
-          cursor: 'pointer',
-          fontSize: '14px'
-        }}
-      >
-        Delete
-      </button>
+      <div style={{ display: 'flex', gap: '5px' }}>
+        <Link
+          to={`/todos/edit/${todo.id}`}
+          style={{
+            backgroundColor: '#ffc107',
+            color: '#212529',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '5px 10px',
+            textDecoration: 'none',
+            fontSize: '14px',
+            display: 'inline-block'
+          }}
+        >
+          编辑
+        </Link>
+        <button
+          onClick={() => onDelete(todo.id)}
+          style={{
+            backgroundColor: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '5px 10px',
+            cursor: 'pointer',
+            fontSize: '14px'
+          }}
+        >
+          删除
+        </button>
+      </div>
     </li>
   )
 }

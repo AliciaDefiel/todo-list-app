@@ -1,34 +1,19 @@
 import { useState } from 'react'
 import TodoItem from './TodoItem'
 
-function TodoList() {
-  const [todos, setTodos] = useState([])
+function TodoList({ todos, onAddTodo, onToggleTodo, onDeleteTodo }) {
   const [inputValue, setInputValue] = useState('')
 
-  const addTodo = () => {
+  const handleAddTodo = () => {
     if (inputValue.trim()) {
-      setTodos([...todos, {
-        id: Date.now(),
-        text: inputValue.trim(),
-        completed: false
-      }])
+      onAddTodo(inputValue.trim())
       setInputValue('')
     }
   }
 
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ))
-  }
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
-  }
-
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      addTodo()
+      handleAddTodo()
     }
   }
 
@@ -51,7 +36,7 @@ function TodoList() {
           }}
         />
         <button 
-          onClick={addTodo}
+          onClick={handleAddTodo}
           style={{
             padding: '10px 20px',
             fontSize: '16px',
@@ -74,8 +59,8 @@ function TodoList() {
             <TodoItem
               key={todo.id}
               todo={todo}
-              onToggle={toggleTodo}
-              onDelete={deleteTodo}
+              onToggle={onToggleTodo}
+              onDelete={onDeleteTodo}
             />
           ))}
         </ul>

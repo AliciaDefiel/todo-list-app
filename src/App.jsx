@@ -4,6 +4,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import About from './About'
 import TodoList from './TodoList'
+import TodoEdit from './TodoEdit'
 import './App.css'
 
 function Home() {
@@ -35,6 +36,32 @@ function Home() {
 }
 
 function App() {
+  const [todos, setTodos] = useState([])
+
+  const updateTodo = (id, updates) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, ...updates } : todo
+    ))
+  }
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id))
+  }
+
+  const addTodo = (text) => {
+    setTodos([...todos, {
+      id: Date.now(),
+      text: text.trim(),
+      completed: false
+    }])
+  }
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ))
+  }
+
   return (
     <Router>
       <header>
@@ -46,7 +73,20 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/todos" element={<TodoList />} />
+        <Route path="/todos" element={
+          <TodoList 
+            todos={todos}
+            onAddTodo={addTodo}
+            onToggleTodo={toggleTodo}
+            onDeleteTodo={deleteTodo}
+          />
+        } />
+        <Route path="/todos/edit/:id" element={
+          <TodoEdit 
+            todos={todos}
+            onUpdateTodo={updateTodo}
+          />
+        } />
         <Route path="/about" element={<About />} />
       </Routes>
 
