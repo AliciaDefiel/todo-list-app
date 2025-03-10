@@ -12,27 +12,45 @@ function Home() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+    <div className="app-main">
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+        <div className="home-logos">
+          <a href="https://vite.dev" target="_blank">
+            <img src={viteLogo} className="logo" alt="Vite logo" />
+          </a>
+          <a href="https://react.dev" target="_blank">
+            <img src={reactLogo} className="logo react" alt="React logo" />
+          </a>
+        </div>
+        <h2 style={{ color: '#2d3748', marginBottom: '1.5rem' }}>欢迎使用待办事项应用</h2>
+        <div style={{ marginBottom: '2rem' }}>
+          <button 
+            onClick={() => setCount((count) => count + 1)}
+            style={{
+              background: 'linear-gradient(135deg, #667eea, #764ba2)',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 2rem',
+              borderRadius: '25px',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            点击次数: {count}
+          </button>
+        </div>
+        <p style={{ color: '#666', marginBottom: '1rem' }}>
+          编辑 <code style={{ background: '#f1f1f1', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>src/App.jsx</code> 来测试热重载
+        </p>
+        <p className="read-the-docs">
+          点击上方的 Vite 和 React 图标了解更多信息
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
@@ -104,56 +122,54 @@ function App() {
 
   return (
     <Router>
-      <header>
-        <h1>Todo List</h1>
-        <nav>
-          <Link to="/">Home</Link> | <Link to="/todos">Todos</Link> | <Link to="/about">About</Link>
+      <header className="app-header">
+        <h1>✅ Todo List</h1>
+        <nav className="app-nav">
+          <Link to="/">首页</Link>
+          <Link to="/todos">待办事项</Link>
+          <Link to="/about">关于</Link>
         </nav>
       </header>
       
       {error && (
-        <div style={{ 
-          backgroundColor: '#f8d7da', 
-          color: '#721c24', 
-          padding: '10px', 
-          margin: '10px',
-          borderRadius: '4px',
-          border: '1px solid #f5c6cb'
-        }}>
-          错误: {error}
-          <button 
-            onClick={() => setError(null)}
-            style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#721c24', cursor: 'pointer' }}
-          >
-            ✕
-          </button>
+        <div className="error-message">
+          <span>错误: {error}</span>
+          <button onClick={() => setError(null)}>✕</button>
         </div>
       )}
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/todos" element={
-          <TodoList 
-            todos={todos}
-            loading={loading}
-            onAddTodo={addTodo}
-            onToggleTodo={toggleTodo}
-            onDeleteTodo={deleteTodo}
-          />
+          <div className="app-main">
+            <TodoList 
+              todos={todos}
+              loading={loading}
+              onAddTodo={addTodo}
+              onToggleTodo={toggleTodo}
+              onDeleteTodo={deleteTodo}
+            />
+          </div>
         } />
         <Route path="/todos/edit/:id" element={
-          <TodoEdit 
-            todos={todos}
-            onUpdateTodo={updateTodo}
-          />
+          <div className="app-main">
+            <TodoEdit 
+              todos={todos}
+              onUpdateTodo={updateTodo}
+            />
+          </div>
         } />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={
+          <div className="app-main">
+            <About />
+          </div>
+        } />
       </Routes>
 
-      <footer>
+      <footer className="app-footer">
         <p>&copy; 2025 Todo List App</p>
         <div>
-          <a href="https://twitter.com" target="_blank">Twitter</a> | 
+          <a href="https://twitter.com" target="_blank">Twitter</a>
           <a href="https://github.com" target="_blank">GitHub</a>
         </div>
       </footer>
