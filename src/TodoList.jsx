@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TodoItem from './TodoItem'
 
-function TodoList({ todos, onAddTodo, onToggleTodo, onDeleteTodo }) {
+function TodoList({ todos, loading, onAddTodo, onToggleTodo, onDeleteTodo }) {
   const [inputValue, setInputValue] = useState('')
 
   const handleAddTodo = () => {
@@ -51,8 +51,12 @@ function TodoList({ todos, onAddTodo, onToggleTodo, onDeleteTodo }) {
         </button>
       </div>
       
-      {todos.length === 0 ? (
-        <p style={{ textAlign: 'center', color: '#666' }}>No todos yet. Add one above!</p>
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+          加载中...
+        </div>
+      ) : todos.length === 0 ? (
+        <p style={{ textAlign: 'center', color: '#666' }}>暂无待办事项，添加一个吧！</p>
       ) : (
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {todos.map(todo => (

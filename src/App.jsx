@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import About from './About'
 import TodoList from './TodoList'
 import TodoEdit from './TodoEdit'
+import { todosApi } from './api'
 import './App.css'
 
 function Home() {
@@ -37,29 +38,68 @@ function Home() {
 
 function App() {
   const [todos, setTodos] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  const updateTodo = (id, updates) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, ...updates } : todo
-    ))
+  // Load todos on app start
+  useEffect(() => {
+    loadTodos()
+  }, [])
+
+  const loadTodos = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      const todosData = await todosApi.getAll()
+      setTodos(todosData)
+    } catch (err) {
+      setError(err.message)
+      console.error('Failed to load todos:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
+  const addTodo = async (text) => {
+    try {
+      setError(null)
+      const newTodo = await todosApi.create(text)
+      setTodos(prev => [newTodo, ...prev])
+    } catch (err) {
+      setError(err.message)
+      console.error('Failed to add todo:', err)
+    }
   }
 
-  const addTodo = (text) => {
-    setTodos([...todos, {
-      id: Date.now(),
-      text: text.trim(),
-      completed: false
-    }])
+  const updateTodo = async (id, updates) => {
+    try {
+      setError(null)
+      const updatedTodo = await todosApi.update(id, updates)
+      setTodos(prev => prev.map(todo =>
+        todo.id === id ? updatedTodo : todo
+      ))
+    } catch (err) {
+      setError(err.message)
+      console.error('Failed to update todo:', err)
+    }
   }
 
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ))
+  const toggleTodo = async (id) => {
+    const todo = todos.find(t => t.id === id)
+    if (todo) {
+      await updateTodo(id, { completed: !todo.completed })
+    }
+  }
+
+  const deleteTodo = async (id) => {
+    try {
+      setError(null)
+      await todosApi.delete(id)
+      setTodos(prev => prev.filter(todo => todo.id !== id))
+    } catch (err) {
+      setError(err.message)
+      console.error('Failed to delete todo:', err)
+    }
   }
 
   return (
@@ -71,11 +111,31 @@ function App() {
         </nav>
       </header>
       
+      {error && (
+        <div style={{ 
+          backgroundColor: '#f8d7da', 
+          color: '#721c24', 
+          padding: '10px', 
+          margin: '10px',
+          borderRadius: '4px',
+          border: '1px solid #f5c6cb'
+        }}>
+          错误: {error}
+          <button 
+            onClick={() => setError(null)}
+            style={{ marginLeft: '10px', background: 'none', border: 'none', color: '#721c24', cursor: 'pointer' }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/todos" element={
           <TodoList 
             todos={todos}
+            loading={loading}
             onAddTodo={addTodo}
             onToggleTodo={toggleTodo}
             onDeleteTodo={deleteTodo}
